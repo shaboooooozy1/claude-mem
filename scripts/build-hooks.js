@@ -160,6 +160,9 @@ async function buildHooks() {
       banner: {
         js: [
           '#!/usr/bin/env bun',
+          // "use strict" must be the first statement (directive prologue) or it's
+          // a no-op -- keep every other banner line after it, not before.
+          '"use strict";',
           'var __filename = __filename || require("node:path").resolve(process.argv[1] || "");',
           'var __dirname = __dirname || require("node:path").dirname(__filename);',
           'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
@@ -195,6 +198,7 @@ async function buildHooks() {
       banner: {
         js: [
           '#!/usr/bin/env bun',
+          '"use strict";',
           'var __filename = __filename || require("node:path").resolve(process.argv[1] || "");',
           'var __dirname = __dirname || require("node:path").dirname(__filename);',
           'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
@@ -254,6 +258,7 @@ async function buildHooks() {
       banner: {
         js: [
           '#!/usr/bin/env node',
+          '"use strict";',
           'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
         ].join('\n')
       }
@@ -307,7 +312,10 @@ async function buildHooks() {
       // __dirname/__filename are native under Node's CJS format, but import.meta.url
       // still needs a banner shim (see worker-service build above).
       banner: {
-        js: 'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
+        js: [
+          '"use strict";',
+          'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
+        ].join('\n')
       }
     });
 
