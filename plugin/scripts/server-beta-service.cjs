@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+"use strict";
 var __filename = __filename || require("node:path").resolve(process.argv[1] || "");
 var __dirname = __dirname || require("node:path").dirname(__filename);
 var importMetaUrl = require("node:url").pathToFileURL(__filename).href;
