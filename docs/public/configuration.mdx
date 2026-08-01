@@ -21,7 +21,7 @@ Settings are managed in `~/.claude-mem/settings.json`. The file is auto-created 
 | `CLAUDE_MEM_WORKER_PORT`      | `37700 + (uid % 100)`           | Worker service port (per-user default; override for fixed port) |
 | `CLAUDE_MEM_WORKER_HOST`      | `127.0.0.1`                     | Worker service host address           |
 | `CLAUDE_MEM_DATA_DIR`         | `~/.claude-mem`                 | Data root — every other path (database, chroma, logs, settings.json, worker.pid) derives from this |
-| `CLAUDE_MEM_SKIP_TOOLS`       | `ListMcpResourcesTool,SlashCommand,Skill,TodoWrite,AskUserQuestion` | Comma-separated tools to exclude from observations |
+| `CLAUDE_MEM_SKIP_TOOLS`       | `ListMcpResourcesTool,SlashCommand,Skill,TodoWrite,TaskCreate,TaskUpdate,TaskGet,TaskList,AskUserQuestion` | Comma-separated tools to exclude from observations |
 
 ### Gemini Provider Settings
 
@@ -380,10 +380,14 @@ Control which tools are excluded from observations. Edit `~/.claude-mem/settings
 - `SlashCommand`
 - `Skill`
 - `TodoWrite`
+- `TaskCreate`
+- `TaskUpdate`
+- `TaskGet`
+- `TaskList`
 - `AskUserQuestion`
 
 **Common customizations:**
-- Include TodoWrite: Remove from skip list to track task planning
+- Include TodoWrite / TaskCreate / TaskUpdate / TaskGet / TaskList: Remove from skip list to track task planning
 - Include AskUserQuestion: Remove to capture decision-making conversations
 - Skip additional tools: Add tool names to reduce observation noise
 

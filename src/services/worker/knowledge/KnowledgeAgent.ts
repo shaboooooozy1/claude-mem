@@ -24,7 +24,11 @@ const KNOWLEDGE_AGENT_DISALLOWED_TOOLS = [
   'Task',           // No spawning sub-agents
   'NotebookEdit',   // No notebook editing
   'AskUserQuestion',// No asking questions
-  'TodoWrite'       
+  'TodoWrite',      // No task tracking (SDK <= 0.2 tool name)
+  'TaskCreate',     // No task tracking (SDK >= 0.3 replacements for TodoWrite)
+  'TaskUpdate',
+  'TaskGet',
+  'TaskList'
 ];
 
 export class KnowledgeAgent {

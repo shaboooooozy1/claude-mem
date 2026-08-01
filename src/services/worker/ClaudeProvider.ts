@@ -132,7 +132,11 @@ export class ClaudeProvider {
       'Task',           // No spawning sub-agents
       'NotebookEdit',   // No notebook editing
       'AskUserQuestion',// No asking questions
-      'TodoWrite'       
+      'TodoWrite',      // No task tracking (SDK <= 0.2 tool name)
+      'TaskCreate',     // No task tracking (SDK >= 0.3 replacements for TodoWrite)
+      'TaskUpdate',
+      'TaskGet',
+      'TaskList'
     ];
 
     const messageGenerator = this.createMessageGenerator(session, cwdTracker);
@@ -196,16 +200,20 @@ export class ClaudeProvider {
 
     try {
       for await (const message of queryResult) {
-        // Quota-aware wall-clock guard (#2234): the SDK pushes `system` events
-        // with subtype `rate_limit` carrying live subscription quota state.
-        // Capture the snapshot, then bail out of the loop before issuing
-        // another request if we've crossed a per-window threshold. API-key
-        // users are exempt — they authorized per-call spend.
-        if (
-          (message as any)?.type === 'system' &&
-          (message as any)?.subtype === 'rate_limit'
-        ) {
-          const info = (message as any).rate_limit_info as RateLimitInfo | undefined;
+        // Quota-aware wall-clock guard (#2234): the SDK reports live
+        // subscription quota state via rate-limit events. SDK <= 0.2 emitted
+        // them as `system` messages with subtype `rate_limit`; SDK >= 0.3
+        // emits a top-level `rate_limit_event` message instead. Accept both
+        // shapes — the inner rate_limit_info payload is unchanged. Capture
+        // the snapshot, then bail out of the loop before issuing another
+        // request if we've crossed a per-window threshold. API-key users
+        // are exempt — they authorized per-call spend.
+        const msgAny = message as any;
+        const isRateLimitMessage =
+          msgAny?.type === 'rate_limit_event' ||
+          (msgAny?.type === 'system' && msgAny?.subtype === 'rate_limit');
+        if (isRateLimitMessage) {
+          const info = msgAny.rate_limit_info as RateLimitInfo | undefined;
           if (info) {
             globalRateLimitStore.set(info);
           }

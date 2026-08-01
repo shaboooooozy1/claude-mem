@@ -975,7 +975,7 @@ write_settings() {
       CLAUDE_MEM_CONTEXT_OBSERVATIONS: '50',
       CLAUDE_MEM_WORKER_PORT: '37777',
       CLAUDE_MEM_WORKER_HOST: '127.0.0.1',
-      CLAUDE_MEM_SKIP_TOOLS: 'ListMcpResourcesTool,SlashCommand,Skill,TodoWrite,AskUserQuestion',
+      CLAUDE_MEM_SKIP_TOOLS: 'ListMcpResourcesTool,SlashCommand,Skill,TodoWrite,TaskCreate,TaskUpdate,TaskGet,TaskList,AskUserQuestion',
       CLAUDE_MEM_PROVIDER: 'claude',
       CLAUDE_MEM_CLAUDE_AUTH_METHOD: 'cli',
       CLAUDE_MEM_GEMINI_API_KEY: '',

@@ -1,10 +1,12 @@
 /**
- * Rate limit store — captures `rate_limit` system events emitted by
+ * Rate limit store — captures rate-limit events emitted by
  * `@anthropic-ai/claude-agent-sdk`'s `query()` stream.
  *
- * The SDK reports the live Claude subscription quota state as `system` events
- * with subtype `rate_limit`. The payload includes the (currently undocumented)
- * `rate_limit_info` shape:
+ * The SDK reports the live Claude subscription quota state via rate-limit
+ * events. SDK <= 0.2 emitted them as `system` messages with subtype
+ * `rate_limit`; SDK >= 0.3 emits a top-level `rate_limit_event` message
+ * instead (see ClaudeProvider.ts). Both carry the same (currently
+ * undocumented) `rate_limit_info` shape:
  *
  *   {
  *     status: "allowed" | "allowed_warning" | "rejected",
