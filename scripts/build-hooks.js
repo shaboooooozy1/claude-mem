@@ -141,7 +141,7 @@ async function buildHooks() {
       format: 'cjs',
       outfile: `${hooksDir}/${WORKER_SERVICE.name}.cjs`,
       minify: true,
-      logLevel: 'error', // Suppress warnings (import.meta warning is benign)
+      logLevel: 'error', // Suppress warnings (the import.meta.url warning is handled by the define+banner shim below)
       external: [
         'bun:sqlite',
         'zod',
@@ -151,13 +151,18 @@ async function buildHooks() {
         'onnxruntime-node'
       ],
       define: {
-        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`
+        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`,
+        // esbuild cannot express `import.meta.url` in CJS output (it becomes
+        // `undefined`), which breaks dependencies (e.g. @anthropic-ai/claude-agent-sdk)
+        // that call createRequire(import.meta.url) at module load. Shim it via the banner.
+        'import.meta.url': 'importMetaUrl'
       },
       banner: {
         js: [
           '#!/usr/bin/env bun',
           'var __filename = __filename || require("node:path").resolve(process.argv[1] || "");',
-          'var __dirname = __dirname || require("node:path").dirname(__filename);'
+          'var __dirname = __dirname || require("node:path").dirname(__filename);',
+          'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
         ].join('\n')
       }
     });
@@ -183,13 +188,16 @@ async function buildHooks() {
         'zod',
       ],
       define: {
-        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`
+        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`,
+        // See worker-service build above: shim import.meta.url for CJS output.
+        'import.meta.url': 'importMetaUrl'
       },
       banner: {
         js: [
           '#!/usr/bin/env bun',
           'var __filename = __filename || require("node:path").resolve(process.argv[1] || "");',
-          'var __dirname = __dirname || require("node:path").dirname(__filename);'
+          'var __dirname = __dirname || require("node:path").dirname(__filename);',
+          'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
         ].join('\n')
       }
     });
@@ -239,10 +247,15 @@ async function buildHooks() {
         '@tree-sitter-grammars/tree-sitter-markdown',
       ],
       define: {
-        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`
+        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`,
+        // See worker-service build above: shim import.meta.url for CJS output.
+        'import.meta.url': 'importMetaUrl'
       },
       banner: {
-        js: '#!/usr/bin/env node'
+        js: [
+          '#!/usr/bin/env node',
+          'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
+        ].join('\n')
       }
     });
 
@@ -287,9 +300,15 @@ async function buildHooks() {
       logLevel: 'error',
       external: ['bun:sqlite', 'zod'],
       define: {
-        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`
+        '__DEFAULT_PACKAGE_VERSION__': `"${version}"`,
+        // See worker-service build above: shim import.meta.url for CJS output.
+        'import.meta.url': 'importMetaUrl'
       },
-      // No banner needed: CJS files under Node.js have __dirname/__filename natively
+      // __dirname/__filename are native under Node's CJS format, but import.meta.url
+      // still needs a banner shim (see worker-service build above).
+      banner: {
+        js: 'var importMetaUrl = require("node:url").pathToFileURL(__filename).href;'
+      }
     });
 
     stripHardcodedDirname(`${hooksDir}/${CONTEXT_GENERATOR.name}.cjs`);

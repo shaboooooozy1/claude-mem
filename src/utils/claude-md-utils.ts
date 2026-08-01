@@ -73,11 +73,15 @@ export function replaceTaggedContent(existingContent: string, newContent: string
 }
 
 export function writeClaudeMdToFolder(folderPath: string, newContent: string, targetFilename?: string): void {
+  if (!folderPath) return;
+
   const resolvedPath = path.resolve(folderPath);
 
   if (resolvedPath.includes('/.git/') || resolvedPath.includes('\\.git\\') || resolvedPath.endsWith('/.git') || resolvedPath.endsWith('\\.git')) return;
 
   const filename = targetFilename ?? getTargetFilename();
+  if (!filename) return;
+
   const claudeMdPath = path.join(folderPath, filename);
   const tempFile = `${claudeMdPath}.tmp`;
 
