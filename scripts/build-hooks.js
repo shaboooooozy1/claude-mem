@@ -77,8 +77,8 @@ async function buildHooks() {
       description: 'Runtime dependencies for claude-mem bundled hooks',
       type: 'module',
       dependencies: {
-        'zod': '^4.3.6',
-        'tree-sitter-cli': '^0.26.5',
+        'zod': '^4.4.3',
+        'tree-sitter-cli': '^0.26.11',
         'tree-sitter-c': '^0.24.1',
         'tree-sitter-cpp': '^0.23.4',
         'tree-sitter-go': '^0.25.0',
@@ -103,7 +103,7 @@ async function buildHooks() {
         '@tree-sitter-grammars/tree-sitter-yaml': '^0.7.1',
         '@derekstride/tree-sitter-sql': '^0.3.11',
         '@tree-sitter-grammars/tree-sitter-markdown': '^0.3.2',
-        'shell-quote': '^1.8.3',
+        'shell-quote': '^1.10.0',
       },
       overrides: {
         'tree-sitter': '^0.25.0'
