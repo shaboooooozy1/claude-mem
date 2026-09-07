@@ -13,4 +13,10 @@ describe('Windows build workflow', () => {
     expect(workflow).toMatch(/^\s+runs-on: windows-2022\s*$/m);
     expect(workflow).not.toContain('windows-latest');
   });
+
+  it('limits the build token to read-only repository contents', () => {
+    const workflow = readFileSync(path.join(projectRoot, '.github/workflows/windows.yml'), 'utf-8');
+
+    expect(workflow).toMatch(/^    permissions:\r?\n      contents: read\s*$/m);
+  });
 });
