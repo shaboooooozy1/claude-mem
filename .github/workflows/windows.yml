@@ -27,7 +27,8 @@ jobs:
           irm bun.sh/install.ps1 | iex
         shell: pwsh
 
-      - run: npm install --no-audit --no-fund
+      # Native tree-sitter bindings are not needed for bundling; skip node-gyp/VS detection.
+      - run: npm install --no-audit --no-fund --ignore-scripts
 
       # Build only — the build-and-sync script also runs marketplace sync + worker
       # restart from a hardcoded ~/.claude/plugins path that doesn't exist on CI.
