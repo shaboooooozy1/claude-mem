@@ -52,10 +52,10 @@
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
   </a>
   <a href="package.json">
-    <img src="https://img.shields.io/badge/version-6.5.0-green.svg" alt="Version">
+    <img src="https://img.shields.io/badge/version-13.0.0-green.svg" alt="Version">
   </a>
   <a href="package.json">
-    <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node">
+    <img src="https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg" alt="Node">
   </a>
   <a href="https://github.com/thedotmack/awesome-claude-code">
     <img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Claude Code">
