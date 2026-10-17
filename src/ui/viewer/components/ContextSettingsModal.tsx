@@ -412,7 +412,7 @@ export function ContextSettingsModal({
                   </FormField>
                   <FormField
                     label="OpenRouter Model"
-                    tooltip="Model identifier from OpenRouter (e.g., anthropic/claude-3.5-sonnet, google/gemini-2.0-flash-thinking-exp)"
+                    tooltip="Model identifier from OpenRouter (e.g., anthropic/claude-sonnet-4.6, google/gemini-2.0-flash-thinking-exp)"
                   >
                     <input
                       type="text"
